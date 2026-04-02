@@ -15,7 +15,9 @@ https://finance-iq-dashboard.netlify.app
 ## 📸 Preview
 
 ![Dashboard](assets/dashboard.png)
+
 ![Transactions](assets/transactions.png)
+
 ![Insights](assets/insights.png)
 
 ---
