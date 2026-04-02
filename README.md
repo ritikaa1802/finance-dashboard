@@ -1,5 +1,5 @@
 # FinanceIQ Dashboard 
-A modern finance dashboard to track and analyze personal finances with clarity.
+A modern finance dashboard to **track and analyze** personal finances with clarity.
 
 Its a clean and interactive **Finance Dashboard UI** built using **HTML, CSS, and Vanilla JavaScript**.  
 This project demonstrates strong frontend fundamentals, intuitive UI design, and structured state management without relying on frameworks or backend services.
@@ -13,11 +13,11 @@ https://finance-iq-dashboard.netlify.app
 ---
 
 ## 📸 Preview
-**Dashboard**
+***Dashboard***
 ![Dashboard](assets/dashboard.png)
 
 
-**Transactions**
+***Transactions***
 ![Transactions](assets/transactions.png)
 
 
