@@ -12,6 +12,14 @@ https://finance-iq-dashboard.netlify.app
 
 ---
 
+## 📸 Preview
+
+![Dashboard](assets/dashboard.png)
+![Transactions](assets/transactions.png)
+![Insights](assets/insights.png)
+
+---
+
 ## Overview
 
 This project simulates a personal finance dashboard that allows users to:
