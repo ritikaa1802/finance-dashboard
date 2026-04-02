@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinanceIQ — Personal Finance Dashboard</title>
+  <meta name="description" content="Track income, expenses, budgets, and spending patterns with a beautiful interactive finance dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">💹</div>
+      <div>
+        <div class="logo-text">FinanceIQ</div>
+        <div class="logo-sub">Personal Dashboard</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group-label">Navigation</div>
+      <button class="nav-link active" data-page="dashboard">
+        <span class="nav-icon">📊</span> Dashboard
+        <span class="nav-key">D</span>
+      </button>
+      <button class="nav-link" data-page="transactions">
+        <span class="nav-icon">📋</span> Transactions
+        <span class="nav-key">T</span>
+      </button>
+      <button class="nav-link" data-page="insights">
+        <span class="nav-icon">💡</span> Insights
+        <span class="nav-key">I</span>
+      </button>
+      <button class="nav-link" data-page="budgets">
+        <span class="nav-icon">🎯</span> Budgets
+        <span class="nav-key">B</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="role-selector">
+        <label for="roleSelect">Active Role</label>
+        <select id="roleSelect">
+          <option value="viewer">Viewer</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="sidebar-actions">
+        <button class="btn-danger-sm" id="resetDataBtn" title="Reset all data to defaults">🔄 Reset Data</button>
+        <button class="btn-hint" id="keyboardHelpBtn" title="Keyboard shortcuts">⌨️ Shortcuts</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+  <div class="main-content">
+
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+        <h1 class="header-title">Finance Dashboard</h1>
+      </div>
+      <div class="header-right">
+        <span class="role-badge viewer" id="roleBadge">👁 Viewer</span>
+        <button class="theme-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">☀️</button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="page-content">
+
+      <!-- ── Dashboard Page ──────────────────────────────────────────────── -->
+      <section class="page active" id="page-dashboard">
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+          <div class="summary-card">
+            <div class="card-accent blue"></div>
+            <div class="card-header">
+              <span class="card-label">Total Balance</span>
+              <div class="card-icon blue">💰</div>
+            </div>
+            <div class="card-value" id="totalBalance" data-value="0">₹0</div>
+            <div class="card-trend">
+              <span class="trend-up">▲ 12.4%</span> overall growth
+            </div>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-accent green"></div>
+            <div class="card-header">
+              <span class="card-label">Total Income</span>
+              <div class="card-icon green">📈</div>
+            </div>
+            <div class="card-value" id="totalIncome" data-value="0">₹0</div>
+            <div class="card-trend" id="incomeTrend">Loading…</div>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-accent red"></div>
+            <div class="card-header">
+              <span class="card-label">Total Expenses</span>
+              <div class="card-icon red">📉</div>
+            </div>
+            <div class="card-value" id="totalExpense" data-value="0">₹0</div>
+            <div class="card-trend" id="expenseTrend">Loading…</div>
+          </div>
+
+          <div class="summary-card">
+            <div class="card-accent orange"></div>
+            <div class="card-header">
+              <span class="card-label">Savings Rate</span>
+              <div class="card-icon orange">🎯</div>
+            </div>
+            <div class="card-value" id="savingsRate">—</div>
+            <div class="card-trend">Avg. income saved</div>
+          </div>
+        </div>
+
+        <!-- Charts + Recent Tx grid -->
+        <div class="dashboard-grid">
+          <!-- Balance trend line chart -->
+          <div class="chart-card wide">
+            <div class="chart-title">📈 Balance Trend &amp; Cash Flow</div>
+            <div class="chart-wrap tall">
+              <canvas id="balanceChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Spending donut -->
+          <div class="chart-card">
+            <div class="chart-title">🍩 Spending by Category</div>
+            <div class="chart-wrap">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Monthly bar chart -->
+          <div class="chart-card">
+            <div class="chart-title">📊 Monthly Income vs Expenses</div>
+            <div class="chart-wrap">
+              <canvas id="monthlyBarChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Recent Transactions widget -->
+          <div class="chart-card wide">
+            <div class="chart-title-row">
+              <div class="chart-title">🕐 Recent Transactions</div>
+              <button class="btn-link" onclick="App.navigateTo('transactions')">View all →</button>
+            </div>
+            <div id="recentTxList" class="recent-tx-list"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── Transactions Page ───────────────────────────────────────────── -->
+      <section class="page" id="page-transactions">
+
+        <div class="page-header-row">
+          <h2 class="section-title">Transactions</h2>
+          <span class="tx-count-badge" id="txCount"></span>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="tx-toolbar">
+          <div class="tx-search-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="tx-search" id="txSearch" placeholder="Search transactions…" />
+          </div>
+          <select class="tx-select" id="txTypeFilter">
+            <option value="all">All Types</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+          <select class="tx-select" id="txCatFilter"></select>
+          <button class="btn-primary" id="addTxBtn" style="display:none">
+            ＋ Add Transaction
+          </button>
+        </div>
+
+        <!-- Date Range Row -->
+        <div class="date-range-row">
+          <span class="date-range-label">📅 Date Range:</span>
+          <input type="date" class="date-input" id="txDateFrom" title="From date" />
+          <span class="date-sep">→</span>
+          <input type="date" class="date-input" id="txDateTo" title="To date" />
+          <button class="btn-link" id="txClearDates">Clear ✕</button>
+        </div>
+
+        <!-- Export -->
+        <div class="export-bar">
+          <button class="btn-secondary" id="exportCsv">⬇ CSV</button>
+          <button class="btn-secondary" id="exportJson">⬇ JSON</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+          <div class="table-wrap">
+            <table class="tx-table">
+              <thead>
+                <tr>
+                  <th><button class="sort-btn" data-sort="description">Description</button></th>
+                  <th><button class="sort-btn active" data-sort="date" data-dir="desc">Date</button></th>
+                  <th>Type</th>
+                  <th style="text-align:right"><button class="sort-btn" data-sort="amount">Amount</button></th>
+                  <th id="txActionsHeader" style="display:none; text-align:right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="txTableBody"></tbody>
+            </table>
+            <div class="tx-empty" id="txEmpty">
+              <div class="empty-icon">🔍</div>
+              <div class="empty-text">No transactions found</div>
+              <div class="empty-sub">Try adjusting your search or filters</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div id="txPagination"></div>
+
+      </section>
+
+      <!-- ── Insights Page ───────────────────────────────────────────────── -->
+      <section class="page" id="page-insights">
+        <h2 class="section-title">Insights &amp; Analytics</h2>
+        <div id="insightsContent"></div>
+      </section>
+
+      <!-- ── Budgets Page ────────────────────────────────────────────────── -->
+      <section class="page" id="page-budgets">
+        <h2 class="section-title">Budget Tracker</h2>
+        <div id="budgetsContent"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ── Add/Edit Transaction Modal ────────────────────────────────────────── -->
+<div class="modal-overlay" id="txModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Transaction</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <form class="modal-body" id="txForm" onsubmit="return false">
+      <input type="hidden" id="txId" />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="txDate">Date</label>
+          <input class="form-input" type="date" id="txDate" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="txType">Type</label>
+          <select class="form-select" id="txType" required>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="txDescription">Description</label>
+        <input class="form-input" type="text" id="txDescription" placeholder="e.g. Grocery shopping" required />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="txCategory">Category</label>
+          <select class="form-select" id="txCategory" required>
+            <option value="">Select…</option>
+            <option>Income</option><option>Housing</option><option>Food</option>
+            <option>Transport</option><option>Entertainment</option>
+            <option>Utilities</option><option>Health</option>
+            <option>Shopping</option><option>Education</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="txAmount">Amount (₹)</label>
+          <input class="form-input" type="number" id="txAmount" min="0" step="0.01" placeholder="0.00" required />
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="modalCancel">Cancel</button>
+      <button class="btn-primary" id="modalSave">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Keyboard Shortcuts Modal ──────────────────────────────────────────── -->
+<div class="modal-overlay" id="keyboardHelp">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3>⌨️ Keyboard Shortcuts</h3>
+      <button class="modal-close" onclick="document.getElementById('keyboardHelp').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body shortcuts-grid">
+      <div class="shortcut-row"><kbd>D</kbd><span>Dashboard</span></div>
+      <div class="shortcut-row"><kbd>T</kbd><span>Transactions</span></div>
+      <div class="shortcut-row"><kbd>I</kbd><span>Insights</span></div>
+      <div class="shortcut-row"><kbd>B</kbd><span>Budgets</span></div>
+      <div class="shortcut-row"><kbd>A</kbd><span>Add Transaction (Admin)</span></div>
+      <div class="shortcut-row"><kbd>?</kbd><span>Show this dialog</span></div>
+      <div class="shortcut-row"><kbd>Esc</kbd><span>Close dialog</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast ─────────────────────────────────────────────────────────────── -->
+<div class="toast success" id="toast"></div>
+
+<!-- ── Scripts ────────────────────────────────────────────────────────────── -->
+<script src="js/data.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/transactions.js"></script>
+<script src="js/budgets.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // Keyboard help button
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("keyboardHelpBtn")?.addEventListener("click", () => {
+      document.getElementById("keyboardHelp").classList.add("open");
+    });
+    document.getElementById("keyboardHelp")?.addEventListener("click", (e) => {
+      if (e.target === document.getElementById("keyboardHelp"))
+        document.getElementById("keyboardHelp").classList.remove("open");
+    });
+  });
+</script>
+
+</body>
+</html>
