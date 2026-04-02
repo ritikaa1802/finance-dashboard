@@ -1,8 +1,8 @@
 # FinanceIQ Dashboard 
+A modern finance dashboard to track and analyze personal finances with clarity.
 
-A **modern finance dashboard** to track and analyze personal finances with clarity.
-
-Built using **HTML, CSS,** and **Vanilla JavaScript,** this frontend-only application demonstrates strong fundamentals in UI design, state management, and data visualization without relying on frameworks or backend services.
+A clean and interactive **Finance Dashboard UI** built using **HTML, CSS, and Vanilla JavaScript**.  
+This project demonstrates strong frontend fundamentals, intuitive UI design, and structured state management without relying on frameworks or backend services.
 
 ---
 
