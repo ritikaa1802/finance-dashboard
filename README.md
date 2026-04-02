@@ -13,10 +13,11 @@ https://finance-iq-dashboard.netlify.app
 ---
 
 ## 📸 Preview
-
+**Dashboard**
 ![Dashboard](assets/dashboard.png)
 
 
+**Transactions**
 ![Transactions](assets/transactions.png)
 
 
